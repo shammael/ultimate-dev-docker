@@ -5,6 +5,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.2.3",
+    "rimraf": "^5.0.1",
     "typescript": "^5.0.4"
   }
 }
