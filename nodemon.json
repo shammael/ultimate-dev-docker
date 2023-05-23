@@ -2,5 +2,6 @@
   "$schema": "http://json.schemastore.org/nodemon",
   "watch": ["src"],
   "ignore": ["src/**/*.spec.ts"],
-  "exec": "node dist/index.js"
+  "exec": "yarn build && node dist/index.js",
+  "ext": "ts, json"
 }
