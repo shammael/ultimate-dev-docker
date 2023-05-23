@@ -1,0 +1,6 @@
+{
+  "$schema": "http://json.schemastore.org/nodemon",
+  "watch": ["src"],
+  "ignore": ["src/**/*.spec.ts"],
+  "exec": "node dist/index.js"
+}
