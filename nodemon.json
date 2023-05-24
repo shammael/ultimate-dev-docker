@@ -3,5 +3,6 @@
   "watch": ["src"],
   "ignore": ["src/**/*.spec.ts"],
   "exec": "yarn build && node dist/index.js",
-  "ext": "ts, json"
+  "ext": "ts, json",
+  "legacyWatch": true
 }
