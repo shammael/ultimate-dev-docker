@@ -21,11 +21,15 @@
   "scripts": {
     "build": "swc ./src -d dist",
     "start": "node ./dist/index.js",
-    "dev": "yarn build && nodemon"
+    "dev": "yarn build && nodemon",
+    "database:migrate": "npx prisma migrate dev",
+    "database:generate": "npx prisma generate"
   },
   "dependencies": {
+    "@prisma/client": "^4.14.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "prisma": "^4.14.1"
   }
 }
