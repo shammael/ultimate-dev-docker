@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String           @id @default(uuid())
+  age             Int
+  name            String
+  email           String           @unique
+  isAdmin         Boolean?         @default(false)
+  writtenPosts    Post[]           @relation("writtenPosts")
+  favoritePosts   Post[]           @relation("favoritePosts")
+  userPreferences UserPreferences?
+  role            Role             @default(BASIC)
+
+  @@unique([age, name]) //Same age and same name thrown an error
+  @@index([email])
+  @@map("users")
+}
+
+model Category {
+  id    String @id @default(uuid())
+  posts Post[]
+  name  String @unique
+
+  @@map("categories")
+}
+
+model UserPreferences {
+  id           String  @id @default(uuid())
+  emailUpdates Boolean @default(false)
+  user         User    @relation(fields: [userId], references: [id])
+  userId       String  @unique
+
+  @@map("userPreferences")
+}
+
+model Post {
+  id            String    @id @default(uuid())
+  rating        Float
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  author        User      @relation("writtenPosts", fields: [authorId], references: [id])
+  authorId      String
+  favoritesPost User      @relation("favoritePosts", fields: [favoriteId], references: [id])
+  favoriteId    String
+  Category      Category? @relation(fields: [categoryId], references: [id])
+  categoryId    String?
+
+  @@map("posts")
+}
+
+enum Role {
+  BASIC
+  ADMIN
+}
