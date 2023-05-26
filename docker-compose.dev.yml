@@ -5,12 +5,89 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     ports:
-      - "3001:3000"
-      - "9229:9229"
+      - "3000:3000"
+      - "9230:9229"
     volumes:
-      - .:/home/app:ro
+      - .:/home/app
       - /home/app/node_modules
+      - /home/app/dist
     command: yarn dev
     environment:
       - PORT=3000
       - NODE_ENV=development
+      - DATABASE_URL=postgres://shammael:password@database-dev:5432/test_db
+    depends_on:
+      - database-dev
+    networks:
+      - service1
+  database-dev:
+    image: postgres:15-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=shammael
+      - POSTGRES_DB=test_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - service1
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "shammamnd2015@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "80:80"
+    depends_on:
+      - database-dev
+    networks:
+      - service1
+volumes:
+  postgres-data:
+
+# database-dev y backend están en la misma red service1
+
+networks:
+  service1:
+    driver: bridge
+
+# https://accesto.com/blog/docker-networks-explained-part-2/
+
+# version: '3.6'
+# services:
+#   service1-db:
+#     image: mariadb:10.3
+#     environment:
+#       MYSQL_ROOT_PASSWORD: secret
+#     networks: 
+#       - service1
+#   service1-web:
+#     image: nginxdemos/hello
+#     ports:
+#       - 80:80
+#     networks: 
+#       - service1
+#       - web
+#   service2-db:
+#     image: mariadb:10.3
+#     environment:
+#       MYSQL_ROOT_PASSWORD: secret
+#     networks: 
+#       - service2
+#   service2-web:
+#     image: nginxdemos/hello
+#     ports:
+#       - 81:80
+#     networks: 
+#       - service2
+#       - web
+
+# networks:
+#   service1:
+#   service2:
+#   web:
+    
+
+    
